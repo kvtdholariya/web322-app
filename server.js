@@ -29,13 +29,13 @@ cloudinary.config({
 const upload = multer(); // no { storage: storage } since we are not using disk storage
 onHttpStart = () => {
     console.log("Express http server listening on " + HTTP_PORT);
-    return new Promise (reslove, reject)=()=> {
-        blogService.initialize().then(function (value) {
+    return new Promise(function(reslove, reject){
+        blogService.initialize().then(function(value){
             console.log(value);
-        }).catch(function (reason) {
-            console.log(reason);
-        });
-    };
+        }).catch(function(reason){
+                console.log(reason);
+            });
+    });
 }
 app.use(express.static('public'));
 //add redirect in the assignment 3
