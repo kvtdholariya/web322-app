@@ -1,5 +1,5 @@
 /********************************************************************************* * 
- * WEB322 – Assignment 02 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part * of this assignment has been copied manually or electronically from any other source * (including 3rd party web sites) or distributed to other students. 
+ * WEB322 – Assignment 03 * I declare that this assignment is my own work in accordance with Seneca Academic Policy. No part * of this assignment has been copied manually or electronically from any other source * (including 3rd party web sites) or distributed to other students. 
  * * * Name: Kavitaben Dholariya
  * Student ID: 010935153
  * Date: 10/06/2022
@@ -29,15 +29,15 @@ cloudinary.config({
 const upload = multer(); // no { storage: storage } since we are not using disk storage
 onHttpStart = () => {
     console.log("Express http server listening on " + HTTP_PORT);
-    return new Promise(function (reslove, reject) {
+    return new Promise (reslove, reject)=()=> {
         blogService.initialize().then(function (value) {
             console.log(value);
         }).catch(function (reason) {
             console.log(reason);
         });
-    });
+    };
 }
-app.use(express.static('static'));
+app.use(express.static('public'));
 //add redirect in the assignment 3
 app.get("/",  (req, res)=> {
     res.redirect("/about");
@@ -144,12 +144,6 @@ app.post("/posts/add", upload.single("featureImage"), (req, res) => {
         res.redirect("/posts");
     });
 })
-
-//app.get('*', function (req, res) {
-//    res.status(404).sendFile(path.join(__dirname, "./views/status-404.html"));
-//});
-
-
 app.use((req, res)=>{
     res.status(404).send("PAGE NOT FOUND!!!!!!!!!!!");
 });
