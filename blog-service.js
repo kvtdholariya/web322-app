@@ -24,6 +24,15 @@ module.exports.initialize = () => {
         resolve("My File successfully read.");
     })
 };
+
+module.exports.addPost = (postData) => {
+    return new Promise((resolve, reject) => {
+        if (!postData.published) postData.published = false;//If postData.published is undefined, explicitly set it to false,
+        postData.id = posts.length + 1;
+        posts.push(postData);
+        resolve(postData);
+    })
+};
 module.exports.getAllPosts = () => {
     return new Promise((resolve, reject) => {
         if (posts.length === 0) {
@@ -54,14 +63,6 @@ module.exports.getCategories = () => {
     })
 };
 
-module.exports.addPost = (postData) => {
-    return new Promise((resolve, reject) => {
-        if (!postData.published) postData.published = false;//If postData.published is undefined, explicitly set it to false,
-        postData.id = posts.length + 1;
-        posts.push(postData);
-        resolve(postData);
-    })
-};
 module.exports.getPostsByCategory = (category) => {
     let ans = [];
     return new Promise((resolve, reject) => {
@@ -84,11 +85,43 @@ module.exports.getPostsByMinDate = (minDateStr) => {
         resolve(ans);
     })
 }
-module.exports.getPostById = (id) => {
+
+module.exports.getPostById=(id)=>{
+    return new Promise((resolve, reject)=> {
+         if (posts.length != 0) {
+             resolve(posts.filter(post => post.id == id))
+         } else {
+             reject({msg: 'no results returned'})
+         }
+     })
+ }
+
+//Assignment#4
+//Step 2: Updating the blog-service.js module
+module.exports.getPublishedPostsByCategory = (category) => {
     return new Promise((resolve, reject) => {
-        posts.forEach(post => {
-            if (post.id == id)
-                resolve(post);
-        });
-    })
+        posts.findAll({
+            where: {
+                published: true,
+                category: category
+            }
+        })
+            .then((data) => {
+                resolve(data);
+            })
+            .catch(() => {
+                reject("no results returned")
+            })
+    });
 }
+
+
+
+
+
+
+
+
+
+
+
