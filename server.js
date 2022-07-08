@@ -93,7 +93,7 @@ app.use(function(req,res,next){
     
 //add redirect in the assignment 3
 app.get("/",  (req, res)=> {
-    res.redirect("/blog");
+    res.redirect("/blog"); //Assignment#4 Finally, as the last step before completing the assignment, update your default "/" route to redirect to "/blog" instead of "/about"
 });
 //Assignment#4 changed about.html to about.hbs
 app.get("/about", (req, res) => {
@@ -308,11 +308,6 @@ app.use((req, res)=>{
     res.status(404).send("PAGE NOT FOUND!!!!!!!!!!!");
 }); 
 
-//Modified in the Assignment 4
-/*
-app.use((req, res) => {
-    res.status(404).render("404")
-})*/
 
 app.listen(HTTP_PORT, onHttpStart);
 
