@@ -11,18 +11,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                  {{#each categories}}
+                    {{#each categories}}
                     <tr>
-                        <td> <a href="/posts?category={{id}}" +  >{{ id }}</a></td>
-                        <td> <a href="/posts?category={{id}}" >{{ category }}</a></td>
+                        <td> <a href="/posts?category={{id}}" +>{{ id }}</a></td>
+                        <td> <a href="/posts?category={{id}}">{{ category }}</a></td>
                     </tr>
-                  {{~/each}}
+                    {{~/each}}
 
-                  {{#unless categories}}
-                  <div class="col-md-12 text-center">
-                    <strong>{{message}}</strong>
-                  </div>
-                  {{/unless}}
+                    {{#unless categories}}
+                    <div class="col-md-12 text-center">
+                        <strong>{{message}}</strong>
+                    </div>
+                    {{/unless}}
                 </tbody>
             </table>
         </div>
