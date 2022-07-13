@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-md-12">
-        <h2>Categories</h2>
+        <!-- Assignment#5code to create a "button" that links to the "/categories/add" route-->
+        <h2>Categories <a href="/categories/add" class="btn btn-success pull-right">Add Category</a></h2>
         <hr />
         <div class="table-responsive">
             <table class="table ">
@@ -15,6 +16,8 @@
                     <tr>
                         <td> <a href="/posts?category={{id}}" +>{{ id }}</a></td>
                         <td> <a href="/posts?category={{id}}">{{ category }}</a></td>
+                        <!-- added below link to remove categories ,Add a "remove" link for every category within in a new column of the table-->
+                        <td><a class="btn btn-danger" href="/categories/delete/{{id}}">remove</a></td>
                     </tr>
                     {{~/each}}
 

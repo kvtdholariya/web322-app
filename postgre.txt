@@ -1,0 +1,14 @@
+Host
+ec2-34-200-35-222.compute-1.amazonaws.com
+Database
+d5io17heisf99i
+User
+irofefsmalkitf
+Port
+5432
+Password
+48ef935be9d230c22e1b285370efed85c121b03e67e97a254a5b625fd0652358
+URI
+postgres://irofefsmalkitf:48ef935be9d230c22e1b285370efed85c121b03e67e97a254a5b625fd0652358@ec2-34-200-35-222.compute-1.amazonaws.com:5432/d5io17heisf99i
+Heroku CLI
+heroku pg:psql postgresql-cubic-07526 --app fierce-ridge-11059

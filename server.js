@@ -45,6 +45,8 @@ onHttpStart = () => {
     });
 }
 app.use(express.static('public'));
+//Assignment#5 include the regular express.urlencoded() middleware
+app.use(express.urlencoded({extended: true}));
 
 //Assignment#4
 //Step 1 add the app.engine() code using exphbs.engine({ … }) and the "extname" property as ".hbs"
@@ -71,7 +73,14 @@ app.engine(".hbs", exphbs.engine({
         //Part 4 Step 1
         safeHTML: function (context) {
             return stripJs(context);
-        }
+        },
+        //Assignment#5 added helper 
+        formatDate: function(dateObj){
+            let year = dateObj.getFullYear();
+            let month = (dateObj.getMonth() + 1).toString();
+            let day = dateObj.getDate().toString();
+            return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+            }
     }
 }));
 
@@ -210,35 +219,47 @@ app.get('/blog/:id', async (req, res) => {
 app.get("/posts", async(req, res) => {
     let category = req.query.category;
     let minDate = req.query.minDate;
-
+//Assignemnt#5 logic modifed for res.render()
     if (category) {
-        blogService.getPostsByCategory(category).then(data => {
-            if (data.length > 0) {
+        blogService.getPostsByCategory(req.query.category).then((data) => {
+            if (data.length > 0)
+            {
                 res.render("posts", { posts: data });
             }
-            else {
+            else
+            {
                 res.render("posts", { message: "no results" });
             }
+        }).catch((err) => {
+            res.render("posts", { message: err });
         })
     }
     else if (minDate != "" && minDate != null) {
-        blogService.getPostsByMinDate(minDate).then(data => {
-            if (data.length > 0) {
+        blogService.getPostsByMinDate(req.query.minDate).then((data) => {
+            if (data.length > 0)
+            {
                 res.render("posts", { posts: data });
             }
-            else {
+            else
+            {
                 res.render("posts", { message: "no results" });
             }
+        }).catch((err) => {
+            res.render("posts", { message: err });
         })
     }
     else {
-        blogService.getAllPosts().then(data => {
-            if (data.length > 0) {
+        blogService.getAllPosts().then((data) => {
+            if (data.length > 0)
+            {
                 res.render("posts", { posts: data });
             }
-            else {
+            else
+            {
                 res.render("posts", { message: "no results" });
             }
+        }).catch((err) => {
+            res.render("posts", { message: err });
         })
     }
 });
@@ -248,18 +269,28 @@ app.get("/posts", async(req, res) => {
 
 app.get("/categories", async(req, res) => {
     blogService.getCategories().then(data => {
-        if (data.length > 0) {
+        //Assignemnt#5 logic modifed for res.render()
+        if (data.length > 0)
+        {
             res.render("categories", { categories: data });
         }
-        else {
+        else
+        {
             res.render("categories", { message: "no results" });
         }
+    }).catch((err) => {
+        res.render("categories", { message: err });
     })
 });
 
 
 app.get('/posts/add',function(req,res) {
-    res.render('addPost');
+    //modifed in the assignment#5
+    blog.getCategories().then(data=>{
+        res.render("addPost", {categories: data});
+    }).catch(err=>{
+        res.render("addPost", {categories: []});
+    });
 });
 //added below assignment 3 from the given document
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
@@ -304,9 +335,41 @@ app.get('/posts/:value', async (req,res)=> {
         console.log(err);
     })
 })
+//added below routes in assignment#5
+app.get("/categories/add", (req,res)=>{
+    res.render("addCategory"); //route to "render" an "addCategory"
+});
+
+app.post("/categories/add", (req,res)=>{
+    blogService.addCategory(req.body).then((data)=>{
+        res.redirect("/categories");
+    });
+});
+
+app.get("/categories/delete/:id", (req,res)=>{
+    blogService.deleteCategoryById(req.params.id).then((data)=>{
+        res.redirect("/categories");
+    }).catch(err=>{
+        res.status(500).send("Unable to Remove Category / Category Not Found");
+    });
+});
+
+app.get("/posts/delete/:id", (req,res)=>{
+    blogService.deletePostById(req.params.id).then((data)=>{
+        res.redirect("/posts");
+    }).catch(err=>{
+        res.status(500).send("Unable to Remove Post / Post not found)");
+    });
+});
+
+/*
 app.use((req, res)=>{
     res.status(404).send("PAGE NOT FOUND!!!!!!!!!!!");
-}); 
+}); */
+
+app.use((req, res) => {
+    res.status(404).render("404");
+});
 
 
 app.listen(HTTP_PORT, onHttpStart);
