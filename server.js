@@ -20,7 +20,7 @@ const cloudinary = require('cloudinary').v2
 const streamifier = require('streamifier')
 //assignment#4
 const exphbs = require("express-handlebars"); //Step 1-->"require" it as exphbs
-const blogData = require("./blog-service"); //Assignment#4 Part 4 Step 3
+//const blogData = require("./blog-service"); //Assignment#4 Part 4 Step 3
 const stripJs = require('strip-js');//Part 4 Step 1
 
 
@@ -128,10 +128,10 @@ app.get('/blog', async (req, res) => {
         // if there's a "category" query, filter the returned posts by category
         if(req.query.category){
             // Obtain the published "posts" by category
-            posts = await blogData.getPublishedPostsByCategory(req.query.category);
+            posts = await blogService.getPublishedPostsByCategory(req.query.category);
         }else{
             // Obtain the published "posts"
-            posts = await blogData.getPublishedPosts();
+            posts = await blogService.getPublishedPosts();
         }
 
         // sort the published posts by postDate
@@ -150,7 +150,7 @@ app.get('/blog', async (req, res) => {
 
     try{
         // Obtain the full list of "categories"
-        let categories = await blogData.getCategories();
+        let categories = await blogService.getCategories();
 
         // store the "categories" data in the viewData object (to be passed to the view)
         viewData.categories = categories;
@@ -286,7 +286,7 @@ app.get("/categories", async(req, res) => {
 
 app.get('/posts/add',function(req,res) {
     //modifed in the assignment#5
-    blog.getCategories().then(data=>{
+    blogService.getCategories().then(data=>{
         res.render("addPost", {categories: data});
     }).catch(err=>{
         res.render("addPost", {categories: []});
