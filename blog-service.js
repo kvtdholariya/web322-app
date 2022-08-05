@@ -1,7 +1,10 @@
 //reference from the week 7 notes 
 //Added in assignment#5 code given in the assigmnet document
-
+const { rejects } = require("assert");
+const { resolve } = require("path");
 const Sequelize = require('sequelize');
+const { gte } = Sequelize.Op;
+
 var sequelize = new Sequelize('d5io17heisf99i', 'irofefsmalkitf', '48ef935be9d230c22e1b285370efed85c121b03e67e97a254a5b625fd0652358', {
     host: 'ec2-34-200-35-222.compute-1.amazonaws.com',
     dialect: 'postgres',
@@ -33,7 +36,7 @@ module.exports.initialize =  () =>{
     return new Promise((resolve, reject) => {
         //This function will invoke the sequelize.sync() function
         sequelize.sync().then(()=>{
-            resolve();
+            resolve("database synced");
         }).catch(err=>{
             reject("unable to sync the database");
         });
@@ -95,8 +98,8 @@ module.exports.addPost =  (postData)=> {
             featureImage: postData.featureImage,
             published: postData.published,
             category: postData.category
-        }).then(data=>{
-            resolve(data);
+        }).then(post=>{
+            resolve(post);
         }).catch(err=>{
             reject("unable to create post");
         });
