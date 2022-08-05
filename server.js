@@ -294,47 +294,40 @@ app.get('/posts/add',function(req,res) {
 });
 //added below assignment 3 from the given document
 app.post("/posts/add", upload.single("featureImage"), (req, res) => {
-    let streamUpload = (req) => {
-        return new Promise((resolve, reject) => {
-            let stream = cloudinary.uploader.upload_stream(
-                (error, result) => {
-                    if (result) {
-                        resolve(result);
-                    } else {
-                        reject(error);
+    if (req.file) {
+        let streamUpload = (req) => {
+            return new Promise((resolve, reject) => {
+                let stream = cloudinary.uploader.upload_stream(
+                    (error, result) => {
+                        if (result) {
+                            resolve(result);
+                        } else {
+                            reject(error);
+                        }
                     }
-                }
-            );
-            streamifier.createReadStream(req.file.buffer).pipe(stream);
+                );
+                streamifier.createReadStream(req.file.buffer).pipe(stream);
+            });
+        };
+        async function upload(req) {
+            let result = await streamUpload(req);
+            console.log(result);
+            return result;
+        };
+        upload(req).then((uploaded) => {
+            processPost(uploaded.url);
+        });
+    } else {
+        processPost("");
+    }
+    function processPost(imageUrl) {
+        req.body.featureImage = imageUrl;
+        // TODO: below added 
+        blogService.addPost(req.body).then((data) => {
+            res.redirect("/posts");
         });
     };
-    async function upload(req) {
-        let result = await streamUpload(req);
-        console.log(result);
-        return result;
-    }
-    upload(req).then((uploaded) => {
-        req.body.featureImage = uploaded.url;
-        // TODO: Process the req.body and add it as a new Blog Post before redirecting to /posts
-        //added here 
-        const { title, body, category, published, featureImage  } = req.body;
-         postData = {
-             title, body, category, published, featureImage
-         }
-         addPost(postData).then((data) => {
-             res.json(data)
-         }).catch((err)=> {
-             console.log(err);
-         })
-    });
-})
-app.get('/posts/:value', async (req,res)=> {
-    blogService.getPostById(req.params.value).then((posts) => {
-        res.json(posts);
-    }).catch((err)=> {
-        console.log(err);
-    })
-})
+});
 //added below routes in assignment#5
 app.get("/categories/add", (req,res)=>{
     res.render("addCategory"); //route to "render" an "addCategory"

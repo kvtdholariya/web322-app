@@ -29,7 +29,7 @@ var Category = sequelize.define("Category", {
 Post.belongsTo(Category, {foreignKey: 'category'});
 
 
-module.exports.initialize = function () {
+module.exports.initialize =  () =>{
     return new Promise((resolve, reject) => {
         //This function will invoke the sequelize.sync() function
         sequelize.sync().then(()=>{
@@ -40,7 +40,7 @@ module.exports.initialize = function () {
     });
 };
 
-module.exports.getAllPosts = function () {
+module.exports.getAllPosts =  ()=>{
     return new Promise((resolve, reject) => {
         //This function will invoke the Post.findAll() function
         Post.findAll().then(data=>{
@@ -51,7 +51,7 @@ module.exports.getAllPosts = function () {
     });
 };
 
-module.exports.getPublishedPosts = function () {
+module.exports.getPublishedPosts =  ()=> {
     return new Promise((resolve, reject) => {
         //This function will invoke the Post.findAll() function and
         Post.findAll({
@@ -66,7 +66,7 @@ module.exports.getPublishedPosts = function () {
     });
 };
 
-module.exports.getCategories = function () {
+module.exports.getCategories =  () =>{
     return new Promise((resolve, reject) => {
         Category.findAll().then(data=>{
             resolve(data);
@@ -76,7 +76,7 @@ module.exports.getCategories = function () {
     });
 };
 
-module.exports.addPost = function (postData) {
+module.exports.addPost =  (postData)=> {
     return new Promise((resolve, reject) => {
         postData.published = (postData.published) ? true : false;
         for (var prop in postData)
@@ -103,7 +103,7 @@ module.exports.addPost = function (postData) {
     });
 };
 
-module.exports.getPostsByCategory = function (category) {
+module.exports.getPostsByCategory =  (category)=>{
     return new Promise((resolve, reject) => {
         Post.findAll({
             where: {
@@ -117,7 +117,7 @@ module.exports.getPostsByCategory = function (category) {
     });
 };
 
-module.exports.getPostsByMinDate = function (minDateStr) {
+module.exports.getPostsByMinDate =  (minDateStr) =>{
     return new Promise((resolve, reject) => {
         const { gte } = Sequelize.Op;
         
@@ -149,7 +149,7 @@ module.exports.getPostById = function (id) {
     });
 };
 
-module.exports.getPublishedPostsByCategory = function (category) {
+module.exports.getPublishedPostsByCategory =  (category) =>{
     return new Promise((resolve, reject) => {
         Post.findAll({
             where: {
@@ -164,7 +164,7 @@ module.exports.getPublishedPostsByCategory = function (category) {
     });
 };
 //below three functions Added in assignment#5 to allow our users to add Categories and delete Posts and Categories
-module.exports.addCategory = function (categoryData) {
+module.exports.addCategory =  (categoryData)=> {
     return new Promise((resolve, reject)=>{
         for (var prop in categoryData)
         {
@@ -184,7 +184,7 @@ module.exports.addCategory = function (categoryData) {
     });
 }
 
-module.exports.deleteCategoryById = function (id) {
+module.exports.deleteCategoryById =  (id)=> {
     return new Promise((resolve, reject)=>{
         Category.destroy({
             where: {
@@ -198,7 +198,7 @@ module.exports.deleteCategoryById = function (id) {
     });
 }
 
-module.exports.deletePostById = function (id) {
+module.exports.deletePostById =  (id) =>{
     return new Promise((resolve, reject)=>{
         Post.destroy({
             where: {
